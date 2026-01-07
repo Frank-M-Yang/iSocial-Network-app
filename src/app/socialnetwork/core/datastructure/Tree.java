@@ -1,13 +1,6 @@
 package app.socialnetwork.core.datastructure;
 
 public class Tree {
-	/*
-	 * private class NaturalComparator implements Comparator { public int
-	 * compare(Object a, Object b) { return ((Comparable)a).compareTo(b); } }
-	 */
-	// the class for implementing a node in the tree.
-	// contains a value, a pointer to the left child and a pointer to the right
-	// child
 
 	public class TreeNode implements Comparable {
 		private Comparable value;
@@ -38,21 +31,28 @@ public class Tree {
 			return value;
 		}
 
-		@Override
-		public int compareTo(Object arg0) {
-			// TODO Auto-generated method stub
-			return 0;
+		public void setLeftTree(TreeNode left) {
+			leftNode = left;
 		}
 
+		public void setRightTree(TreeNode right) {
+			rightNode = right;
+		}
+
+		@Override
+		public int compareTo(Object o) {
+			if (o instanceof TreeNode) {
+				TreeNode other = (TreeNode) o;
+				return this.value.compareTo(other.value);
+			}
+			return this.value.compareTo(o);
+		}
 	}
 
 	public abstract class TreeAction {
-		public abstract void run(Tree.TreeNode n);
+		public abstract void run(TreeNode n);
 	}
 
-	// start of the actual tree class
-
-	// the root of our tree
 	protected TreeNode root;
 
 	public Tree() {
@@ -60,17 +60,21 @@ public class Tree {
 	}
 
 	public void traverse(TreeAction action) {
-//		QueueVector t = new QueueVector();
-//		//Stack t = new Stack();
-//		t.push(root);
-//		while(!t.empty())
-//		{
-//			TreeNode n = (TreeNode)t.pop();
-//			action.run(n);
-//			 
-//			if(n.getLeftTree() != null) t.push(n.getLeftTree());
-//			if(n.getRightTree() != null) t.push(n.getRightTree());
-//		}
+		if (root == null) {
+			return;
+		}
+
+		Queue t = new Queue();
+		t.push(root);
+		while (!t.empty()) {
+			TreeNode n = (TreeNode) t.pop();
+			action.run(n);
+
+			if (n.getLeftTree() != null)
+				t.push(n.getLeftTree());
+			if (n.getRightTree() != null)
+				t.push(n.getRightTree());
+		}
 	}
 
 	public void traverseNode(TreeNode n, TreeAction action) {
@@ -91,38 +95,206 @@ public class Tree {
 		insertAtNode(element, root, null);
 	}
 
-	// we traverse the tree.
-	// Current holds the pointer to the TreeNode we are currently checking
-	// Parent holds the pointer to the parent of the current TreeNode
 	private void insertAtNode(Comparable element, TreeNode current, TreeNode parent) {
-		// if the node we check is empty
 		if (current == null) {
 			TreeNode newNode = new TreeNode(element);
-			// the current node is empty, but we have a parent
 			if (parent != null) {
-				// do we add it to the left?
 				if (element.compareTo(parent.value) < 0) {
 					parent.leftNode = newNode;
-				}
-				// or do we add it to the right?
-				else {
+				} else {
 					parent.rightNode = newNode;
 				}
-			}
-			// the current node is empty and it has no parent, we actually have an empty
-			// tree
-			else
+			} else {
 				root = newNode;
+			}
 		} else if (element.compareTo(current.value) == 0) {
-			// if the element is already in the tree, what to do?
-		}
-		// if the element is smaller than current, go left
-		else if (element.compareTo(current.value) < 0) {
+			return;
+		} else if (element.compareTo(current.value) < 0) {
 			insertAtNode(element, current.getLeftTree(), current);
-		}
-		// if the element is bigger than current, go right
-		else
+		} else {
 			insertAtNode(element, current.getRightTree(), current);
+		}
 	}
 
+	public boolean contains(Comparable element) {
+		return searchNode(element, root);
+	}
+
+	private boolean searchNode(Comparable element, TreeNode current) {
+		if (current == null) {
+			return false;
+		}
+
+		int comparison = element.compareTo(current.value);
+
+		if (comparison == 0) {
+			return true;
+		} else if (comparison < 0) {
+			return searchNode(element, current.getLeftTree());
+		} else {
+			return searchNode(element, current.getRightTree());
+		}
+	}
+
+	public boolean isEmpty() {
+		return root == null;
+	}
+
+	public TreeNode getRoot() {
+		return root;
+	}
+
+	public int height() {
+		return heightNode(root);
+	}
+
+	private int heightNode(TreeNode node) {
+		if (node == null) {
+			return 0;
+		}
+
+		int leftHeight = heightNode(node.getLeftTree());
+		int rightHeight = heightNode(node.getRightTree());
+
+		return 1 + Math.max(leftHeight, rightHeight);
+	}
+
+	public int size() {
+		return sizeNode(root);
+	}
+
+	private int sizeNode(TreeNode node) {
+		if (node == null) {
+			return 0;
+		}
+
+		return 1 + sizeNode(node.getLeftTree()) + sizeNode(node.getRightTree());
+	}
+
+	public Comparable findMin() {
+		if (root == null) {
+			return null;
+		}
+		return findMinNode(root).value;
+	}
+
+	private TreeNode findMinNode(TreeNode node) {
+		if (node.getLeftTree() == null) {
+			return node;
+		}
+		return findMinNode(node.getLeftTree());
+	}
+
+	public Comparable findMax() {
+		if (root == null) {
+			return null;
+		}
+		return findMaxNode(root).value;
+	}
+
+	private TreeNode findMaxNode(TreeNode node) {
+		if (node.getRightTree() == null) {
+			return node;
+		}
+		return findMaxNode(node.getRightTree());
+	}
+
+	public void swapTree() {
+		swapTreeNode(root);
+	}
+
+	private void swapTreeNode(TreeNode node) {
+		if (node == null) {
+			return;
+		}
+
+		TreeNode temp = node.leftNode;
+		node.leftNode = node.rightNode;
+		node.rightNode = temp;
+
+		swapTreeNode(node.leftNode);
+		swapTreeNode(node.rightNode);
+	}
+
+	public Comparable findMedian() {
+		if (root == null) {
+			return null;
+		}
+
+		int size = size();
+		int medianIndex = size / 2;
+		int[] counter = { 0 };
+		return findKthElement(root, medianIndex, counter);
+	}
+
+	private Comparable findKthElement(TreeNode node, int k, int[] counter) {
+		if (node == null) {
+			return null;
+		}
+
+		Comparable left = findKthElement(node.getLeftTree(), k, counter);
+		if (left != null) {
+			return left;
+		}
+
+		if (counter[0] == k) {
+			return node.value;
+		}
+		counter[0]++;
+
+		return findKthElement(node.getRightTree(), k, counter);
+	}
+
+	public double findAverage() {
+		if (root == null) {
+			return 0.0;
+		}
+
+		int size = size();
+		double sum = calculateSum(root);
+
+		return sum / size;
+	}
+
+	private double calculateSum(TreeNode node) {
+		if (node == null) {
+			return 0.0;
+		}
+
+		double currentValue = 0.0;
+		if (node.value instanceof Number) {
+			currentValue = ((Number) node.value).doubleValue();
+		}
+
+		double leftSum = calculateSum(node.getLeftTree());
+		double rightSum = calculateSum(node.getRightTree());
+
+		return currentValue + leftSum + rightSum;
+	}
+
+	public Comparable removeMin() {
+		if (root == null) {
+			return null;
+		}
+
+		if (root.getLeftTree() == null) {
+			Comparable minValue = root.value;
+			root = root.getRightTree();
+			return minValue;
+		}
+
+		return removeMinNode(root);
+	}
+
+	private Comparable removeMinNode(TreeNode parent) {
+		TreeNode current = parent.getLeftTree();
+
+		if (current.getLeftTree() == null) {
+			Comparable minValue = current.value;
+			parent.setLeftTree(current.getRightTree());
+			return minValue;
+		}
+
+		return removeMinNode(current);
+	}
 }
