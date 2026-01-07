@@ -1,6 +1,6 @@
 package app.socialnetwork.core;
 
-import app.socialnetwork.core.datastructure.RedBlackTree;
+import app.socialnetwork.datastructure.RedBlackTree;
 
 /**
  * Abstract base class for all profile types in the social network. Provides
