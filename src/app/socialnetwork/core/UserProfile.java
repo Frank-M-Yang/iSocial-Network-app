@@ -1,5 +1,11 @@
 package app.socialnetwork.core;
 
+/**
+ * User profile in the social network Contains user-specific information like
+ * age and status updates
+ * 
+ * @author Ming Yang (Student ID: 0643277)
+ */
 public class UserProfile extends Profile {
 
 	private int age;
@@ -16,7 +22,7 @@ public class UserProfile extends Profile {
 	}
 
 	/**
-	 * Gets the age of the user
+	 * Gets the age of this user
 	 * 
 	 * @return the age
 	 */
@@ -25,8 +31,7 @@ public class UserProfile extends Profile {
 	}
 
 	/**
-	 * Posts a status update to this user's wall Time complexity: O(log n)
-	 * guaranteed by Red-Black Tree
+	 * Posts a status update to this user's wall
 	 * 
 	 * @param status the status update to post
 	 */
@@ -37,8 +42,9 @@ public class UserProfile extends Profile {
 	/**
 	 * Checks if this is a user profile
 	 * 
-	 * @return true
+	 * @return true (this is a user profile)
 	 */
+	@Override
 	public boolean isUserProfile() {
 		return true;
 	}
@@ -46,18 +52,19 @@ public class UserProfile extends Profile {
 	/**
 	 * Checks if this is a corporate profile
 	 * 
-	 * @return false
+	 * @return false (this is not a corporate profile)
 	 */
+	@Override
 	public boolean isCorporateProfile() {
 		return false;
 	}
 
 	/**
-	 * Returns string representation of the user profile Format: "User Profile:
-	 * username, age"
+	 * Returns a string representation of this user profile
 	 * 
-	 * @return string representation
+	 * @return string in format "User Profile: name, age"
 	 */
+	@Override
 	public String toString() {
 		return "User Profile: " + name + ", " + age;
 	}

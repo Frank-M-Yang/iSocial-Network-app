@@ -1,9 +1,10 @@
 package app.socialnetwork.core;
 
 /**
- * Corporate Profile - Pure data container Follower relationships are managed in
- * SocialNetwork's followGraph
+ * Corporate profile in the social network Represents companies that can post
+ * advertisements
  * 
+ * @author Ming Yang (Student ID: 0643277)
  */
 public class CorporateProfile extends Profile {
 
@@ -17,8 +18,7 @@ public class CorporateProfile extends Profile {
 	}
 
 	/**
-	 * Posts an advertisement to this company's wall Time complexity: O(log n)
-	 * guaranteed by Red-Black Tree
+	 * Posts an advertisement to this company's wall
 	 * 
 	 * @param ad the advertisement to post
 	 */
@@ -29,8 +29,9 @@ public class CorporateProfile extends Profile {
 	/**
 	 * Checks if this is a user profile
 	 * 
-	 * @return false
+	 * @return false (this is not a user profile)
 	 */
+	@Override
 	public boolean isUserProfile() {
 		return false;
 	}
@@ -38,18 +39,19 @@ public class CorporateProfile extends Profile {
 	/**
 	 * Checks if this is a corporate profile
 	 * 
-	 * @return true
+	 * @return true (this is a corporate profile)
 	 */
+	@Override
 	public boolean isCorporateProfile() {
 		return true;
 	}
 
 	/**
-	 * Returns string representation of the corporate profile Format: "Corporate
-	 * Profile: company name"
+	 * Returns a string representation of this corporate profile
 	 * 
-	 * @return string representation
+	 * @return string in format "Corporate Profile: name"
 	 */
+	@Override
 	public String toString() {
 		return "Corporate Profile: " + name;
 	}
