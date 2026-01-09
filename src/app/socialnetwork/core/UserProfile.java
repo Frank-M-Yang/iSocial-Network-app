@@ -2,27 +2,63 @@ package app.socialnetwork.core;
 
 public class UserProfile extends Profile {
 
-	public UserProfile(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
+	private int age;
+
+	/**
+	 * Creates a new user profile
+	 * 
+	 * @param username the username
+	 * @param age      the age of the user
+	 */
+	public UserProfile(String username, int age) {
+		super(username);
+		this.age = age;
 	}
 
-	@Override
+	/**
+	 * Gets the age of the user
+	 * 
+	 * @return the age
+	 */
+	public int getAge() {
+		return age;
+	}
+
+	/**
+	 * Posts a status update to this user's wall Time complexity: O(log n)
+	 * guaranteed by Red-Black Tree
+	 * 
+	 * @param status the status update to post
+	 */
+	public void postStatus(StatusUpdate status) {
+		wall.insert(status);
+	}
+
+	/**
+	 * Checks if this is a user profile
+	 * 
+	 * @return true
+	 */
 	public boolean isUserProfile() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
+	/**
+	 * Checks if this is a corporate profile
+	 * 
+	 * @return false
+	 */
 	public boolean isCorporateProfile() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
+	/**
+	 * Returns string representation of the user profile Format: "User Profile:
+	 * username, age"
+	 * 
+	 * @return string representation
+	 */
 	public String toString() {
-		// TODO Auto-generated method stub
-		return null;
+		return "User Profile: " + name + ", " + age;
 	}
-
 }

@@ -1,8 +1,8 @@
 package app.socialnetwork.datastructure;
 
 /**
- * Red-Black Tree implementation. Self-balancing binary search tree.
- * 
+ * Red-Black Tree implementation. Self-balancing binary search tree with O(log
+ * n) guaranteed performance.
  */
 public class RedBlackTree {
 
@@ -10,7 +10,7 @@ public class RedBlackTree {
 		Red, Black
 	}
 
-	protected class ColouredTreeNode implements Comparable {
+	public class ColouredTreeNode implements Comparable {
 		protected TreeNodeColor color;
 		protected Comparable value;
 		protected ColouredTreeNode leftNode;
@@ -20,6 +20,10 @@ public class RedBlackTree {
 		public ColouredTreeNode(Comparable value, TreeNodeColor color) {
 			this.value = value;
 			this.color = color;
+		}
+
+		public Comparable getValue() {
+			return value;
 		}
 
 		public String toString() {
@@ -33,6 +37,13 @@ public class RedBlackTree {
 			ColouredTreeNode node2 = (ColouredTreeNode) arg0;
 			return value.compareTo(node2.value);
 		}
+	}
+
+	/**
+	 * TreeAction interface for traversal operations 关键：改为 static abstract class
+	 */
+	public static abstract class TreeAction {
+		public abstract void run(RedBlackTree.ColouredTreeNode n);
 	}
 
 	protected ColouredTreeNode root;
@@ -136,6 +147,37 @@ public class RedBlackTree {
 		}
 		if (z == root)
 			root.color = TreeNodeColor.Black;
+	}
+
+	public void insert(Comparable element) {
+		rbInsert(element);
+	}
+
+	public void traverseInOrder(TreeAction action) {
+		traverseNode(root, action);
+	}
+
+	private void traverseNode(ColouredTreeNode n, TreeAction action) {
+		if (n != nilNode) {
+			traverseNode(n.leftNode, action);
+			action.run(n);
+			traverseNode(n.rightNode, action);
+		}
+	}
+
+	public boolean isEmpty() {
+		return root == nilNode;
+	}
+
+	public int size() {
+		return countNodes(root);
+	}
+
+	private int countNodes(ColouredTreeNode n) {
+		if (n == nilNode) {
+			return 0;
+		}
+		return 1 + countNodes(n.leftNode) + countNodes(n.rightNode);
 	}
 
 	public void recPrint() {

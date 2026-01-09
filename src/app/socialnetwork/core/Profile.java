@@ -9,8 +9,8 @@ import app.socialnetwork.datastructure.RedBlackTree;
  */
 public abstract class Profile {
 
-	protected String name;
-	protected RedBlackTree wall;
+	protected String name; // child class can access
+	protected RedBlackTree wall; // child class can access
 
 	/**
 	 * Creates a new profile with the given name
